@@ -1,79 +1,83 @@
 class ArticlesController < ApplicationController
-  before_action :set_article, only: [:show, :edit, :update, :destroy]
 
-  # GET /articles
-  # GET /articles.json
-  def index
-    @articles = Article.all
-  end
+before_action :set_article, only: [:edit, :update, :show, :destroy]
 
-  # GET /articles/1
-  # GET /articles/1.json
-  def show
-  end
+def index
 
-  # GET /articles/new
-  def new
-    @article = Article.new
-  end
+@articles = Article.all
 
-  # GET /articles/1/edit
-  def edit
-  end
+end
 
-  # POST /articles
-  # POST /articles.json
-  def create
-    debugger
-    @article = Article.new(article_params)
-    @article.user = User.first
+def new
 
-    respond_to do |format|
-      if @article.save
-        flash[:success] = "Article (#{@article.title}) was successfully created."
-        format.html { redirect_to @article }
-        format.json { render :show, status: :created, location: @article }
-      else
-        format.html { render :new }
-        format.json { render json: @article.errors, status: :unprocessable_entity }
-      end
-    end
-  end
+@article = Article.new
 
-  # PATCH/PUT /articles/1
-  # PATCH/PUT /articles/1.json
-  def update
-    respond_to do |format|
-      if @article.update(article_params)
-        flash[:success] =  "Article (#{@article.title}) was successfully updated."
-        format.html { redirect_to @article }
-        format.json { render :show, status: :ok, location: @article }
-      else
-        format.html { render :edit }
-        format.json { render json: @article.errors, status: :unprocessable_entity }
-      end
-    end
-  end
+end
 
-  # DELETE /articles/1
-  # DELETE /articles/1.json
-  def destroy
-    @article.destroy
-    respond_to do |format|
-      flash[:danger] = "Article (#{@article.title}) was successfully destroyed."
-      format.html { redirect_to articles_url }
-      format.json { head :no_content }
-    end
-  end
+def edit
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_article
-      @article = Article.find(params[:id])
-    end
+end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def article_params
-      params.require(:article).permit(:title, :description)
-    end
+def create
+
+@article = Article.new(article_params)
+
+if @article.save
+
+flash[:notice] = "Article was successfully created"
+
+redirect_to article_path(@article)
+
+else
+
+render 'new'
+
+end
+
+end
+
+def update
+
+if @article.update(article_params)
+
+flash[:notice] = "Article was successfully updated"
+
+redirect_to article_path(@article)
+
+else
+
+render 'edit'
+
+end
+
+end
+
+def show
+
+end
+
+def destroy
+
+@article.destroy
+
+flash[:notice] = "Article was successfully deleted"
+
+redirect_to articles_path
+
+end
+
+private
+
+def set_article
+
+@article = Article.find(params[:id])
+
+end
+
+def article_params
+
+params.require(:article).permit(:title, :description)
+
+end
+
 end
